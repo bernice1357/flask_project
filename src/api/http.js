@@ -1,13 +1,45 @@
 import axios from 'axios';
 
-// const instance = axios.create({
-//   baseURL: 'https://some-domain.com/api/',
-//   timeout: 1000,
-//   headers: {'X-Custom-Header': 'foobar'}
+// const api = axios.create({
+//   baseURL: 'https://19bf-211-20-131-166.ngrok.io/',
+//   headers: {
+//       "Content-Type": "application/json",
+//       accept: "application/json",
+//   },
 // });
+// //patient/respiratoryCharting/
+
+// async function GET(url, params) {
+//   try {
+//       const response = await api.get(url, params);
+//       return response.data;
+//   }
+//   catch (error) {
+//       return Promise.reject(error);
+//   }
+// }
+// async function POST(url, params) {
+//   try {
+//       const response = await api.post(url, params);
+//       return response;
+//   }
+//   catch (error) {
+//       return Promise.reject(error);
+//   }
+// }
+// async function PUT(url, params) {
+//   try {
+//       const response = await api.put(url, params);
+//       return response.data;
+//   }
+//   catch (error) {
+//       return Promise.reject(error);
+//   }
+// }
+// export { GET, POST, PUT };
 
 export default{
-  getData(){
+  getData(id){
     axios(
     {
       method: 'post',
@@ -16,25 +48,16 @@ export default{
       },
       url: 'https://19bf-211-20-131-166.ngrok.io/patient/respiratoryCharting/',
       data: {
-        "id": 145867,
+        "id": id,
         "field_name": "FiO2"
       },
     })
       .then((res)=>{
-        console.log("res: "+res)
-        console.log("success: "+res.patientunitstayid)
-        // if(res.success){
-        //   console.log("true")
-        // }else{
-        //   console.log("false")
-        // }
-        return 999
+        console.log("res: "+JSON.stringify(res.data.data))
+        return JSON.stringify(res.data.data)
       })
       .catch((err)=>{
         console.log("error: "+err)
       })
-    
   }
 }
-
-// export default http

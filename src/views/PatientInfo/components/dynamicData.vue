@@ -52,6 +52,11 @@ export default({
   setup() {//props
     const activeName = ref('1')
 
+    // const dynamicData=(async()=>{
+    //   let res = await this.$POST('patient/respiratoryCharting/', {"id": 145867,"field_name": "FiO2"})
+    //   console.log(res)
+    // })
+    
     const dynamicData = api.getData()
     // const dynamicData = [
     //   {data:"0.08", name:"troponin-I"},
