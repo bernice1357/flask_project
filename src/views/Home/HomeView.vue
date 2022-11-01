@@ -1,43 +1,41 @@
 <template lang="pug">
-#home-page.main
-  h1 home page
-  el-table.table(
-    :data="filterTableData" 
-  )
-    el-table-column(
-    )
-      
+#HomePage
+  img(:src="logo")
+  el-button(type="primary" :icon="Position" @click="direct") 進入系統
 </template>
 <script>
-import router from '@router'
+import router from '@/router'
+import { Position, Delete } from '@element-plus/icons-vue'
+import logo from '@as/pic/logo/square.png'
 export default({
   name: "HomePage",
   setup() {
-    const columnSetting = [
-      {prop: "id", label: "病人編號"},
-    ]
-    const tableData = [
-      {status: {type:'Danger', data: '12.34'}, id: '1'}
-    ]
-    const redirect = (row)=>{
-      router.push({ path: '/patientInfo', query: { id: row.id } })
+    const direct = ()=>{
+      router.push({ path: '/navPage'})
     }
-
     return {
-      columnSetting,
-      tableData,
-      redirect
+      logo,
+      direct,
+      Position,
+      Delete
     }
   },
 })
 </script>
 <style scoped>
-.table{
-  position: absolute;
-  left: 10%;
+img{
+  width: 50%;
+  position: fixed;
+  top: 10%;
+  left: 25%;
+  /* display:block; 
+  margin:auto; */
 }
-
-/* .main{
-  background-color:aqua;
-} */
+.el-button{
+  width: 44%;
+  height: 10%;
+  position: fixed;
+  top: 60%;
+  left: 28%;
+}
 </style>

@@ -1,7 +1,7 @@
 <template lang="pug">
 #ExpandPage
   .header
-    h1 篩選欲顯示之特徵
+    h1 篩選特徵欄位
     el-page-header.back(@back="onBack($route.query.id, $route.query.status)")
   .search
     el-form
@@ -9,114 +9,231 @@
         el-col.span(:span="2")
           span &ensp;靜態欄位
         el-col(:span="8")
-          el-popover.input1(placement="bottom" :width="200" trigger="click")
+          el-popover(
+            placement="bottom" 
+            :width="200" 
+            trigger="click"
+          )
             template(#reference)
-              el-input(placeholder="靜態欄位" v-model="search" clearable)
-            el-checkbox-group.table(v-for="item in filterData" v-model="checkResult")
-              el-checkbox(:label="item.name")
+              el-input(
+                placeholder="靜態欄位" 
+                v-model="search" 
+                clearable
+              )
+            .checkbox
+              el-checkbox-group(
+                v-for="item in filterStatic" 
+                v-model="staticResult"
+              )
+                el-checkbox(:label="item.name")
         el-col.span(:span="2")
           span 動態欄位
         el-col(:span="8")
-          el-popover.input2(placement="bottom" :width="200" trigger="click")
+          el-popover(
+            placement="bottom" 
+            :width="200" 
+            trigger="click"
+          )
             template(#reference)
-              el-input(placeholder="動態欄位" v-model="search" clearable)
-            el-checkbox-group.table(v-for="item in filterData" v-model="checkResult")
-              el-checkbox(:label="item.name")
+              el-input(
+                placeholder="動態欄位" 
+                v-model="search" 
+                clearable
+              )
+            .checkbox
+              el-checkbox-group.table(
+                v-for="item in filterDynamic" 
+                v-model="dynamicResult"
+              )
+                el-checkbox(:label="item.name")
     el-button.send(type="primary" @click="submit") 更新
   .result
     el-table.static(
       :data="staticData"
       border
+      :header-cell-style="headerStyle"
     )
       el-table-column(
-        v-for="item in staticColumn"
-        :prop="item.prop"
-        :label="item.label"
+        prop="name"
+        label="靜態資料欄位"
         align="center"
       )
-
+      el-table-column(
+        prop="offset"
+        label="分鐘"
+        align="center"
+      )
+      el-table-column(
+        prop="value"
+        label="數值"
+        align="center"
+      )
     el-table.dynamic(
-      :data="staticData"
+      :data="dynamicData"
       border
       :header-cell-style="headerStyle"
     )
       el-table-column(
-        v-for="item in dynamicColumn"
-        :prop="item.prop"
-        :label="item.label" 
+        prop="name"
+        label="動態資料欄位"
         align="center"
       )
-
+      el-table-column(
+        prop="offset"
+        label="分鐘"
+        align="center"
+      )
+      el-table-column(
+        prop="value"
+        label="數值"
+        align="center"
+      )
 </template>
 <script>
 import router from '@/router'
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import axios from 'axios';
 export default({
   name: "ExpandPage",
   setup() {
-    const checkResult = ref([])//checkbox選擇的結果
-    const origin = [//原始資料
-      {data:"0.08", name:"troponin-I"},
-      {data:"0.3", name:"direct bilirubin"},
-      {data:"2.45", name:"lactate"},
-      {data:"0.5", name:"fibrinogen"},
-      {data:"1.1", name:"CPK-MB INDEX"},
-      {data:"66", name:"CPK1"},
-      {data:"66", name:"CPK2"},
-      {data:"66", name:"CPK3"},
-      {data:"66", name:"CPK4"},
-      {data:"66", name:"CPK5"},
-    ]
+    const headerStyle = {background:'#eef1f6',color:'#606266'}
+    const staticResult = ref([])//checkbox選擇的結果
+    const dynamicResult = ref([])//checkbox選擇的結果
+
     const staticColumn = [//表格欄位
       {prop:"name", label:"靜態資料欄位"},
       {prop:"data", label:"數值"},
     ]
+    const staticOrigin = ref([])
+    const getStatic = async()=>{
+      staticOrigin.value = await axios.post(
+      'https://19bf-211-20-131-166.ngrok.io/patient/lab/static/',
+      {"id": 145867})//TODO:之後要改props.id
+      staticOrigin.value = staticOrigin.value.data.data
+    }
+
     const dynamicColumn = [//表格欄位
       {prop:"name", label:"動態資料欄位"},
       {prop:"data", label:"數值"},
     ]
-    const staticData = ref([])
-    const dynamicData = ref([])
+
+    const dynamicOrigin = ref([
+      {name:'FiO2'},
+      {name:'PEEP'},
+      {name:'Plateau Pressure'},
+      {name:'systemicMean'},
+      {name:'heartRate'},
+      {name:'observationOffset'},
+      {name:'systemicDiastolic'},
+      {name:'respiration'},
+      {name:'systemicSystolic'},
+      {name:'dialysisTotal'},
+      {name:'intakeOutputOffset'},
+      {name:'intakeTotal'},
+      {name:'netTotal'},
+      {name:'outputTotal'}
+    ])
+    const respName = ['FiO2','PEEP','Plateau Pressure']
+    const vitalName = ['systemicMean','heartRate','observationOffset','systemicDiastolic','respiration','systemicSystolic']
+    const ioName = ['dialysisTotal','intakeOutputOffset','intakeTotal','netTotal','outputTotal']
+
+    const getDynamic = async()=>{
+      for(var i in dynamicResult.value){
+        var res = []
+        if(respName.indexOf(dynamicResult.value[i])+1){
+          res = await axios.post(
+          'https://19bf-211-20-131-166.ngrok.io/patient/respiratoryCharting/',
+          {"id": 145867, "field_name":dynamicResult.value[i], "hour":false})
+
+        }else if(vitalName.indexOf(dynamicResult.value[i])+1){
+          res = await axios.post(
+          'https://19bf-211-20-131-166.ngrok.io/patient/vitalPeriodic/',
+          {"id": 145867, "field_name":dynamicResult.value[i], "hour":false})
+
+        }else if(ioName.indexOf(dynamicResult.value[i])+1){
+          res = await axios.post(
+          'https://19bf-211-20-131-166.ngrok.io/patient/intakeOutput/',
+          {"id": 145867, "field_name":dynamicResult.value[i], "hour":false})
+        }
+        res = res.data.data
+        for(var j in res){
+          res[j]['name']=dynamicResult.value[i]
+        }
+        dynamicData.value = dynamicData.value.concat(res);
+      }
+    }
+
     const search = ref('')//關鍵字
-    const filterData = computed(() =>//關鍵字篩選出來的欄位
-      origin.filter(
+    const filterStatic = computed(() =>//關鍵字篩選出來的欄位
+      staticOrigin.value.filter(
         (data) =>
           !search.value ||
           data.name.toLowerCase().includes(search.value.toLowerCase())
       )
     )
+    const filterDynamic = computed(() =>//關鍵字篩選出來的欄位
+      dynamicOrigin.value.filter(
+        (data) =>
+          !search.value ||
+          data.name.toLowerCase().includes(search.value.toLowerCase())
+      )
+    )
+
+    const staticData = ref([])
+    const dynamicData = ref([])
+    
     const submit = ()=>{
+      //靜態
       staticData.value=[]
-      for(let i=0; i<checkResult.value.length; i++){
-        staticData.value.push(origin.find(({ name }) => name === checkResult.value[i]))
+      for(let i=0; i<staticResult.value.length; i++){
+        staticData.value.push(staticOrigin.value.find(({ name }) => name === staticResult.value[i]))
       }
+
+      //動態
+      // dynamicData.value=[]
+      // for(let i=0; i<checkResult2.value.length; i++){
+      //   dynamicData.value.push(dynamicOrigin.value.find(({ name }) => name === checkResult2.value[i]))
+      // }
+      getDynamic()
     }
+
     const onBack = (id, status)=>{
       router.push({ path: '/patient_info', query: { id: id, status: status } })
     }
 
+    onMounted(()=>{
+      getStatic()
+    })
+
     return {
-      filterData,
+      filterStatic,
+      filterDynamic,
       staticData,
       dynamicData,
-      origin,
       search,
-      checkResult,
+      staticResult,
+      dynamicResult,
       staticColumn,
       dynamicColumn,
       submit,
       onBack,
+      headerStyle
     }
   },
 })
 </script>
 <style scoped>
-
 .send{
   position: absolute;
-  right: 2%;
-  top: 0%;
+  right: 4%;
+  top: 26%;
   width: 10%;
+  /* padding-top: 10px; */
+}
+
+.checkbox{
+  height: 400px;
+  overflow: auto;
 }
 
 .back{
@@ -125,7 +242,6 @@ export default({
   width: 25%;
   height: 50px;
 }
-
 
 .span {
   text-align: center;
@@ -159,17 +275,27 @@ h1{
   width: 80%;
   top: 30%;
   left: 10%;
+  padding-bottom: 10px;
 }
 .dynamic{
+  height: 500px;
+  overflow: auto;
   position: absolute;
-  width: 45%;
-  right: 2%;
+  width: 48%;
+  right: 1%;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
 
 .static{
+  height: 500px;
   position: absolute;
-  width: 45%;
-  left: 2%;
+  width: 48%;
+  left: 0%;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+
+.dynamic:hover,.static:hover{
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 }
 
 .search{
@@ -178,7 +304,9 @@ h1{
   height: 50px;
   position: absolute;
   top: 0%;
-  left: 12%;
-  border:5px black solid;;
+  left: 10%;
+  padding: 20px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+  /* border-bottom:1px rgb(25, 23, 23) solid;; */
 }
 </style>

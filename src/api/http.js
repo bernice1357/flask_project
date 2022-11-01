@@ -1,39 +1,75 @@
 import axios from 'axios';
-
-// const instance = axios.create({
-//   baseURL: 'https://some-domain.com/api/',
-//   timeout: 1000,
-//   headers: {'X-Custom-Header': 'foobar'}
-// });
+import { ElMessage } from 'element-plus'
+const baseURL = 'https://19bf-211-20-131-166.ngrok.io'
 
 export default{
-  getData(){
+  getData(id, field_name){
+    axios(
+    {
+      method: 'post',
+      headers:{
+        'Content-Type': 'application/json'
+      },
+      url: baseURL + '/patient/respiratoryCharting/',
+      data: {
+        "id": id,
+        "field_name": field_name
+      },
+    })
+    .then((res)=>{
+      // console.log(res.data.data)
+      return res.data
+    })
+    .catch((err)=>{
+      ElMessage({
+        message: err.response.data.detail,
+        duration: 5000,
+        type: 'error',
+      })
+    })
+  },
+  patient(id){
     axios(
     {
       method: 'post',
       headers:{
         'Content-Type': 'application/json',
       },
-      url: 'https://19bf-211-20-131-166.ngrok.io/patient/respiratoryCharting/',
+      url: baseURL + '/patient/',
       data: {
-        "id": 145867,
-        "field_name": "FiO2"
+        "id": id
       },
     })
-      .then((res)=>{
-        console.log("res: "+res)
-        console.log("success: "+res.patientunitstayid)
-        // if(res.success){
-        //   console.log("true")
-        // }else{
-        //   console.log("false")
-        // }
-        return 999
+    .then((res)=>{
+      // console.log(res.data.data)
+      return res.data.data
+    })
+    .catch((err)=>{
+      ElMessage({
+        message: err.response.data.detail,
+        duration: 5000,
+        type: 'error',
       })
-      .catch((err)=>{
-        console.log("error: "+err)
-      })
-    
+    })
+  },
+  static(){
+    axios.post(
+      'https://19bf-211-20-131-166.ngrok.io/patient/lab/static/',
+      {"id": 145867})
+    console.log(1)
+    // return res.data
+    // .then((res)=>{
+    //   console.log(1)
+    //   // console.log(res.data)
+    //   return res.data
+    // })
+    // .catch((err)=>{
+    //   ElMessage({
+    //     message: err.response.data.detail,
+    //     duration: 5000,
+    //     type: 'error',
+    //   })
+    // })
   }
 }
 

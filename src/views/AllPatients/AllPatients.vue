@@ -1,10 +1,12 @@
 <template lang="pug">
 #all-patients
   .header
-    h1 所有病患資訊
+    el-breadcrumb(:separator-icon="ArrowRight")
+      el-breadcrumb-item(:to="{ path: '/home' }") 首頁
+      el-breadcrumb-item 所有病患資訊
   el-table.table(
     border
-    :data="filterTableData" 
+    :data="tableData"
   )
     el-table-column(
       align="center"
@@ -23,7 +25,7 @@
         ) {{ scope.row.tag }}%
 
     el-table-column(
-      prop="id" 
+      prop="patientunitstayid" 
       label="病患編號" 
       align="center"
     )
@@ -32,6 +34,14 @@
       label="性別"
       :filters="[{ text: '男性', value: 'Male' },{ text: '女性', value: 'Female' }]"
       :filter-method="filterGender"
+      filter-placement="bottom-end"
+      align="center"
+    )
+    el-table-column(
+      prop="age"
+      label="年齡"
+      sortable
+      :sort-by="['age']"
       filter-placement="bottom-end"
       align="center"
     )
@@ -47,37 +57,28 @@
 <script>
 import router from '@router'
 import { Document } from '@element-plus/icons-vue'
-import { computed, ref } from 'vue'
+import { computed, ref, onMounted } from 'vue'
+// import axios from 'axios';
 export default({
   name: "AllPatients",
   setup() {
+    // const tableData = ref([])
+    // const getData = async()=>{
+    //   tableData.value = await axios.post(
+    //   'https://19bf-211-20-131-166.ngrok.io/patient/',
+    //   {"id": 145867})//TODO:之後要改props.id
+    //   tableData.value = tableData.value.data.data
+    // }
     const tableData = [
-      {tag: '12', id: '002-10148', gender: "Female"},
-      {tag: '51', id: '002-10328', gender: "Male"},
-      {tag: '27', id: '002-10444', gender: "Female"},
-      {tag: '54', id: '002-10665', gender: "Male"},
-      {tag: '18', id: '002-10708', gender: "Male"},
-      {tag: '90', id: '002-10724', gender: "Male"},
-      {tag: '72', id: '002-10767', gender: "Male"},
-      {tag: '18', id: '002-10777', gender: "Male"},
-      {tag: '34', id: '002-10798', gender: "Male"},
-      {tag: '16', id: '002-10891', gender: "Female"},
-      {tag: '90', id: '002-11232', gender: "Male"},
-      {tag: '90', id: '002-11232', gender: "Male"},
-      {tag: '90', id: '002-11232', gender: "Male"},
-      {tag: '90', id: '002-11232', gender: "Male"},
-      {tag: '90', id: '002-11232', gender: "Male"},
-      {tag: '90', id: '002-11232', gender: "Male"},
-      {tag: '90', id: '002-11232', gender: "Male"},
+      {tag: '12', patientunitstayid: 145867, gender: "Female", age: 54}
     ]
-
     const redirect = (row)=>{
-      router.push({ path: '/patient_info', query: { id: row.id, status: row.tag } })
+      router.push({ path: '/patient_info', query: { id: row.patientunitstayid, status: row.tag } })
     }
 
     const search = ref('')
     const filterTableData = computed(() =>
-      tableData.filter(
+      tableData.value.filter(
         (data) =>
           !search.value ||
           data.id.toLowerCase().includes(search.value.toLowerCase())
@@ -90,6 +91,10 @@ export default({
       return value === 'danger' ? row.tag < 50 : row.tag >= 50
     }
 
+    onMounted(()=>{
+      // getData()
+    })
+
     return {
       filterTableData,
       search,
@@ -97,6 +102,7 @@ export default({
       redirect,
       Document,
       filterGender,
+      tableData
     }
   },
 })
