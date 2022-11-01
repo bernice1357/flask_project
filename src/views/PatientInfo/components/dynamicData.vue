@@ -91,6 +91,15 @@ export default({
         chartData.value.push(parseInt(res[i].value))
       }
     }
+    
+    // const dynamicData = api.getData()
+    // const dynamicData = [
+    //   {data:"0.08", name:"troponin-I"},
+    //   {data:"0.3", name:"direct bilirubin"},
+    //   {data:"2.45", name:"lactate"},
+    //   {data:"0.5", name:"fibrinogen"},
+    //   {data:"1.1", name:"CPK-MB INDEX"},
+    // ]
 
     const dynamicSearch = ref('')
     const filterDynamicData = computed(() =>//動態
