@@ -2,17 +2,9 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
   {
-    path: '/home',
+    path: '/',
     name: 'home',
     component: () => import('@v/Home/HomeView.vue')
-  },{
-    path: '/summary',
-    name: 'Summary',
-    component: () => import('@v/SummaryPage/SummaryPage.vue')
-  },{
-    path: '/all_patients',
-    name: 'AllPatients',
-    component: () => import('@v/AllPatients/AllPatients.vue')
   },{
     path: '/patient_info',
     name: 'PatientInfo',
@@ -24,7 +16,18 @@ const routes = [
   },{
     path: '/navPage',
     name: 'NavPage',
-    component: () => import('@v/navPage/navPage.vue')
+    component: () => import('@v/navPage/navPage.vue'),
+    children:[
+      {
+        path: '/all_patients',
+        name: 'AllPatients',
+        component: () => import('@v/AllPatients/AllPatients.vue')
+      },{
+        path: '/summary',
+        name: 'Summary',
+        component: () => import('@v/SummaryPage/SummaryPage.vue')
+      }
+    ]
   }
 ]
 

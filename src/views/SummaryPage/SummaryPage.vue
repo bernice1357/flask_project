@@ -2,7 +2,7 @@
 #SummaryPage
   .header
     el-breadcrumb(:separator-icon="ArrowRight")
-      el-breadcrumb-item(:to="{ path: '/home' }") 首頁
+      el-breadcrumb-item(:to="{ path: '/' }") 首頁
       el-breadcrumb-item 模型綜合分析
   .content
     el-tabs(v-model="activeName" tab-position="right" @tab-click="handleClick")
@@ -66,21 +66,19 @@ export default({
 })
 </script>
 <style scoped>
+/* body::-webkit-scrollbar {
+  display: none;
+} */
 .el-breadcrumb{
-  margin-top: 20px;
+  margin-top: 50px;
 }
 .header{
   position: absolute;
   top: 0;
-  left: 150px;
+  left: 3%;
+  width: 100%;
   height: 60px;
-  width: calc(100vw - 150px);
   z-index: 4;
-  background-image: radial-gradient(transparent 1px,#ffffff 1px);
-  background-size: 4px 4px;
-  backdrop-filter: saturate(50%) blur(4px);
-  -webkit-backdrop-filter: saturate(50%) blur(4px);
-  /* border-bottom:1px rgb(222, 222, 230) solid; */
 }
 
 .content{

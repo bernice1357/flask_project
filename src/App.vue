@@ -1,6 +1,6 @@
 <template lang="pug">
 #App
-  router-link(to="/home")
+  router-link(to="/")
   router-view 
 </template>
 <script>

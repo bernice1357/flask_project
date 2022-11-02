@@ -2,7 +2,7 @@
 #all-patients
   .header
     el-breadcrumb(:separator-icon="ArrowRight")
-      el-breadcrumb-item(:to="{ path: '/home' }") 首頁
+      el-breadcrumb-item(:to="{ path: '/' }") 首頁
       el-breadcrumb-item 所有病患資訊
   el-table.table(
     border
@@ -108,23 +108,21 @@ export default({
 })
 </script>
 <style scoped>
+.el-breadcrumb{
+  margin-top: 40px;
+}
 .header{
-  position: fixed;
+  position: absolute;
   top: 0;
-  left: 150px;
-  width: calc(100vw - 165px);
+  left: 3%;
+  width: 100%;
   height: 60px;
   z-index: 4;
-  background-image: radial-gradient(transparent 1px,#ffffff 1px);
-  background-size: 4px 4px;
-  backdrop-filter: saturate(50%) blur(4px);
-  -webkit-backdrop-filter: saturate(50%) blur(4px);
-  border-bottom:1px rgb(222, 222, 230) solid;
 }
 .table{
   position: absolute;
   left: 15%;
-  top: 15%;
+  top: 20%;
   width: 70%;
   height: 75%;
   border-radius: 10px;
