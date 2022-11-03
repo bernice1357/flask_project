@@ -228,7 +228,6 @@ export default({
   right: 4%;
   top: 26%;
   width: 10%;
-  /* padding-top: 10px; */
 }
 
 .checkbox{
@@ -250,8 +249,8 @@ export default({
 .header{
   position: fixed;
   top: 0;
-  left: 150px;
-  width: calc(100vw - 165px);
+  left: 0;
+  width: 100vw;
   height: 60px;
   z-index: 4;
   background-image: radial-gradient(transparent 1px,#ffffff 1px);

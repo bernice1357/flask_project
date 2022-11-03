@@ -28,14 +28,12 @@ img{
   position: fixed;
   top: 10%;
   left: 25%;
-  /* display:block; 
-  margin:auto; */
 }
 .el-button{
   width: 44%;
   height: 10%;
   position: fixed;
-  top: 60%;
+  top: 70%;
   left: 28%;
 }
 </style>

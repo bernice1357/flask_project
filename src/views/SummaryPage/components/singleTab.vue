@@ -23,8 +23,9 @@ h2 單一特徵欄位
       :disabled="item.disabled"
       size="small" 
     )
-el-button.send(type="primary" @click="submit") 更新
 img.pdp1(:src="pdp1")
+el-button.send(type="primary" @click="submit") 更新
+
 
 h2 兩個特徵欄位
 .checkbox
@@ -74,7 +75,8 @@ export default({
       {name:'age', disabled: false},
       {name:'D2_systemicsystolic_MIN', disabled: false},
       {name:'D2_WBC x 1000_AVG', disabled: false},
-      {name:'lactate', disabled: false}
+      {name:'lactate', disabled: false},
+
     ]
 
     //限制checkbox勾選上限
@@ -143,6 +145,8 @@ img{
   margin-bottom: 20px;
 }
 .checkbox{
+  /* position: absolute; */
+  /* width: 100vw; */
   border: 1px rgb(171, 171, 182) solid;
   padding: 10px;
   border-radius: 5px;

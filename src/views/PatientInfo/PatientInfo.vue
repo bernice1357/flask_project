@@ -58,13 +58,13 @@ export default({
 <style scoped>
 .all{
   left: 150px;
-  width: calc(100vw - 150px);
+  width: 100vw;
 }
 .header{
   position: fixed;
   top: 0;
-  left: 150px;
-  width: calc(100vw - 165px);
+  left: 0;
+  width: 100vw;
   height: 60px;
   z-index: 4;
   background-image: radial-gradient(transparent 1px,#ffffff 1px);
