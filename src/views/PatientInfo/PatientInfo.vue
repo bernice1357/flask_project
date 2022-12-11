@@ -1,13 +1,18 @@
 <template lang="pug">
 #patient-info.all
   .header
-    el-page-header.back(@back="onBack")
+    el-page-header.back(
+      title="回上頁" 
+      @back="onBack"
+    )
       template(#content)
-        span.title 病人 {{$route.query.id}}
+        span.title 病人編號 {{$route.query.id}}
 
     el-button.expand(
       type="primary"
       @click="expandAll($route.query.id)"
+      color="#fff699"
+      :icon="DataAnalysis" 
     ) 資料篩選
   .content
     LimeBlock.lime(
@@ -25,6 +30,7 @@ import dynamicData from './components/dynamicData.vue'
 import staticData from './components/staticData.vue'
 import basicData from './components/basicData.vue'
 import router from '@/router'
+import { DataAnalysis } from '@element-plus/icons-vue'
 
 export default({
   name: "PatientInfo",
@@ -51,6 +57,7 @@ export default({
       staticData,
       dynamicData,
       headerStyle,
+      DataAnalysis
     }
   },
 })
@@ -67,17 +74,24 @@ export default({
   width: 100vw;
   height: 60px;
   z-index: 4;
-  background-image: radial-gradient(transparent 1px,#ffffff 1px);
+  background-image: radial-gradient(transparent 1px,#cedae5 1px);
   background-size: 4px 4px;
   backdrop-filter: saturate(50%) blur(4px);
   -webkit-backdrop-filter: saturate(50%) blur(4px);
-  border-bottom:1px rgb(222, 222, 230) solid;
+  border-bottom:1px #8d9fb0 solid;
+}
+
+.el-page-header__content{
+  font-size: 30px;
 }
 .back{
+  padding-left: 50px;
+  background-color: #c3d0db;
   position: absolute;
   left: 12%;
-  width: 25%;
-  height: 50px;
+  /* width: 25%; */
+  height: 60px;
+  border-radius: 30px;
 }
 
 .table1:hover,.table2:hover,.table3:hover,.lime:hover{

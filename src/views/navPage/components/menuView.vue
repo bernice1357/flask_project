@@ -4,7 +4,7 @@
     mode="horizontal"
     @select="whichPath"
     active-text-color="#395679"
-    text-color="#888888"
+    text-color="#768ebe"
     :default-active="activePath"
   )
     el-menu-item.page(index="summary") 模型綜合分析
@@ -36,6 +36,10 @@ export default({
 <style scoped>
 .main{
   width: 30vw;
-  right: 0;
+  right: -26%;
+}
+.el-menu-item{
+  font-size: 20px;
+  background-color: #cedae5;
 }
 </style>

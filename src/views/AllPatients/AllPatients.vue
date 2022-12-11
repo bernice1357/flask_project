@@ -6,7 +6,7 @@
       el-breadcrumb-item 所有病患資訊
   el-table.table(
     border
-    :data="tableData"
+    :data="filterTableData"
   )
     el-table-column(
       align="center"
@@ -58,22 +58,45 @@
 import router from '@router'
 import { Document } from '@element-plus/icons-vue'
 import { computed, ref, onMounted } from 'vue'
-// import axios from 'axios';
-export default({
-  name: "AllPatients",
+import axios from 'axios'
+export default {
+  name: 'AllPatients',
   setup() {
-    // const tableData = ref([])
-    // const getData = async()=>{
-    //   tableData.value = await axios.post(
-    //   'https://19bf-211-20-131-166.ngrok.io/patient/',
-    //   {"id": 145867})//TODO:之後要改props.id
-    //   tableData.value = tableData.value.data.data
-    // }
-    const tableData = [
-      {tag: '12', patientunitstayid: 145867, gender: "Female", age: 54}
+    const status = [
+      '12',
+      '44',
+      '33',
+      '65',
+      '90',
+      '56',
+      '22',
+      '84',
+      '73',
+      '95',
+      '40',
+      '66',
+      '37',
+      '60',
+      '96',
+      '36',
     ]
-    const redirect = (row)=>{
-      router.push({ path: '/patient_info', query: { id: row.patientunitstayid, status: row.tag } })
+    const tableData = ref([])
+    const getData = async () => {
+      tableData.value = await axios.post(' https://vae.fly.dev/patient/all/')
+      tableData.value = tableData.value.data.data
+
+      for (var i in tableData.value) {
+        // console.log(status[i])
+        tableData.value[i].tag = status[i]
+      }
+      // console.log('eee: ',tableData.value)
+    }
+
+    const redirect = (row) => {
+      router.push({
+        path: '/patient_info',
+        query: { id: row.patientunitstayid, status: row.tag },
+      })
     }
 
     const search = ref('')
@@ -87,12 +110,12 @@ export default({
     const filterGender = (value, row) => {
       return row.gender === value
     }
-    const filterStatus = (value, row)=>{
+    const filterStatus = (value, row) => {
       return value === 'danger' ? row.tag < 50 : row.tag >= 50
     }
 
-    onMounted(()=>{
-      // getData()
+    onMounted(() => {
+      getData()
     })
 
     return {
@@ -102,16 +125,20 @@ export default({
       redirect,
       Document,
       filterGender,
-      tableData
+      tableData,
     }
   },
-})
+}
 </script>
 <style scoped>
-.el-breadcrumb{
+.el-breadcrumb {
   margin-top: 40px;
+  font-size: 16px;
 }
-.header{
+/* .el-breadcrumb.el-breadcrumb__item.el-breadcrumb__inner{
+  font-size: 20px;
+} */
+.header {
   position: absolute;
   top: 0;
   left: 3%;
@@ -119,19 +146,28 @@ export default({
   height: 60px;
   z-index: 4;
 }
-.table{
+.table {
   position: absolute;
-  left: 15%;
-  top: 20%;
-  width: 70%;
-  height: 75%;
+  left: 10%;
+  top: 15%;
+  width: 80%;
+  height: 90%;
   border-radius: 10px;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
-h1{
+.el-table {
+  font-size: 18px;
+}
+.el-button.is-link {
+  font-size: 15px;
+  color: #8da3b7;
+  font-family: serif;
+}
+h1 {
   margin: 0px;
   position: absolute;
-  width:  100%;
+  width: 100%;
   text-align: center;
   left: 0%;
   top: 17%;

@@ -8,8 +8,8 @@
     el-tabs(v-model="activeName" tab-position="right" @tab-click="handleClick")
       el-tab-pane(label="整體分析" name="1")
         .title
-          h2 ROC曲線(Receiver Operating Curve)
-          h4 將各模型之 AUC 進行比較以判斷結果表現
+          h1 ROC曲線(Receiver Operating Curve)
+          h3 將各模型之 AUC 進行比較以判斷結果表現
         img(:src="rocImg.roc1")
         h5 不可允許空值模型的 ROC
         img(:src="rocImg.roc2")
@@ -33,9 +33,6 @@
 </template>
 <script>
 import { ref } from 'vue'
-
-import img2 from '@as/pic/pdp2.png'
-import img3 from '@as/pic/pdp1.png'
 import rocImg from '@as/pic/roc'
 import { ArrowRight } from '@element-plus/icons-vue'
 import singleTab from '@v/SummaryPage/components/singleTab.vue'
@@ -45,7 +42,7 @@ export default({
     singleTab
   },
   setup() {
-    const activeName = ref('4')
+    const activeName = ref('1')
     const columnSetting = [
       {prop: "id", label: "病人編號"},
     ]
@@ -56,8 +53,6 @@ export default({
     return {
       columnSetting,
       tableData,
-      img2,
-      img3,
       rocImg,
       activeName,
       ArrowRight
@@ -66,8 +61,15 @@ export default({
 })
 </script>
 <style scoped>
+h1{
+  font-size: 40px;
+}
+h3{
+  font-size: 20px;
+}
 .el-breadcrumb{
-  margin-top: 50px;
+  margin-top: 40px;
+  font-size: 16px;
 }
 .header{
   position: absolute;
@@ -84,22 +86,13 @@ export default({
   width: 100%;
 }
 
-h1{
-  margin: 0px;
-  position: absolute;
-  width:  100%;
-  text-align: center;
-  left: 0%;
-  top: 17%;
-}
-
 img{
   width: 80%;
   display: block;
   margin:auto;
 }
 
-h2, h4, h5{
+h1, h3, h5{
   display: flex;
   justify-content: center; 
 }
@@ -121,7 +114,11 @@ h2, h4, h5{
 .el-backtop{
   width: 120px;
   border-radius: 10px;
-  background-color: rgb(158, 170, 181);
-  color: #ffffff;
+  background-color: #fff699;
+  color: #5f5b34;
+}
+
+el-tabs.el-tabs__item{
+  font-size: 20px;
 }
 </style>

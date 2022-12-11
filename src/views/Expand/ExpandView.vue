@@ -2,7 +2,10 @@
 #ExpandPage
   .header
     h1 篩選特徵欄位
-    el-page-header.back(@back="onBack($route.query.id, $route.query.status)")
+    el-page-header.back(
+      title="回上頁" 
+      @back="onBack($route.query.id, $route.query.status)"
+    )
   .search
     el-form
       el-form-item(size="large")
@@ -92,86 +95,106 @@
 <script>
 import router from '@/router'
 import { ref, computed, onMounted } from 'vue'
-import axios from 'axios';
-export default({
-  name: "ExpandPage",
+import axios from 'axios'
+export default {
+  name: 'ExpandPage',
   setup() {
-    const headerStyle = {background:'#eef1f6',color:'#606266'}
-    const staticResult = ref([])//checkbox選擇的結果
-    const dynamicResult = ref([])//checkbox選擇的結果
+    const headerStyle = { background: '#eef1f6', color: '#606266' }
+    const staticResult = ref([]) //checkbox選擇的結果
+    const dynamicResult = ref([]) //checkbox選擇的結果
 
-    const staticColumn = [//表格欄位
-      {prop:"name", label:"靜態資料欄位"},
-      {prop:"data", label:"數值"},
+    const staticColumn = [
+      //表格欄位
+      { prop: 'name', label: '靜態資料欄位' },
+      { prop: 'data', label: '數值' },
     ]
     const staticOrigin = ref([])
-    const getStatic = async()=>{
+    const getStatic = async () => {
       staticOrigin.value = await axios.post(
-      'https://19bf-211-20-131-166.ngrok.io/patient/lab/static/',
-      {"id": 145867})//TODO:之後要改props.id
+        ' https://vae.fly.dev/patient/lab/static/',
+        { id: 145867 }
+      ) //TODO:之後要改props.id
       staticOrigin.value = staticOrigin.value.data.data
     }
 
-    const dynamicColumn = [//表格欄位
-      {prop:"name", label:"動態資料欄位"},
-      {prop:"data", label:"數值"},
+    const dynamicColumn = [
+      //表格欄位
+      { prop: 'name', label: '動態資料欄位' },
+      { prop: 'data', label: '數值' },
     ]
 
     const dynamicOrigin = ref([
-      {name:'FiO2'},
-      {name:'PEEP'},
-      {name:'Plateau Pressure'},
-      {name:'systemicMean'},
-      {name:'heartRate'},
-      {name:'observationOffset'},
-      {name:'systemicDiastolic'},
-      {name:'respiration'},
-      {name:'systemicSystolic'},
-      {name:'dialysisTotal'},
-      {name:'intakeOutputOffset'},
-      {name:'intakeTotal'},
-      {name:'netTotal'},
-      {name:'outputTotal'}
+      { name: 'FiO2' },
+      { name: 'PEEP' },
+      { name: 'Plateau Pressure' },
+      { name: 'systemicMean' },
+      { name: 'heartRate' },
+      { name: 'observationOffset' },
+      { name: 'systemicDiastolic' },
+      { name: 'respiration' },
+      { name: 'systemicSystolic' },
+      { name: 'dialysisTotal' },
+      { name: 'intakeOutputOffset' },
+      { name: 'intakeTotal' },
+      { name: 'netTotal' },
+      { name: 'outputTotal' },
     ])
-    const respName = ['FiO2','PEEP','Plateau Pressure']
-    const vitalName = ['systemicMean','heartRate','observationOffset','systemicDiastolic','respiration','systemicSystolic']
-    const ioName = ['dialysisTotal','intakeOutputOffset','intakeTotal','netTotal','outputTotal']
+    const respName = ['FiO2', 'PEEP', 'Plateau Pressure']
+    const vitalName = [
+      'systemicMean',
+      'heartRate',
+      'observationOffset',
+      'systemicDiastolic',
+      'respiration',
+      'systemicSystolic',
+    ]
+    const ioName = [
+      'dialysisTotal',
+      'intakeOutputOffset',
+      'intakeTotal',
+      'netTotal',
+      'outputTotal',
+    ]
 
-    const getDynamic = async()=>{
-      for(var i in dynamicResult.value){
+    const getDynamic = async () => {
+      for (var i in dynamicResult.value) {
         var res = []
-        if(respName.indexOf(dynamicResult.value[i])+1){
+        if (respName.indexOf(dynamicResult.value[i]) + 1) {
           res = await axios.post(
-          'https://19bf-211-20-131-166.ngrok.io/patient/respiratoryCharting/',
-          {"id": 145867, "field_name":dynamicResult.value[i], "hour":false})
-
-        }else if(vitalName.indexOf(dynamicResult.value[i])+1){
+            ' https://vae.fly.dev/patient/respiratoryCharting/',
+            { id: 145867, field_name: dynamicResult.value[i], hour: false }
+          )
+        } else if (vitalName.indexOf(dynamicResult.value[i]) + 1) {
           res = await axios.post(
-          'https://19bf-211-20-131-166.ngrok.io/patient/vitalPeriodic/',
-          {"id": 145867, "field_name":dynamicResult.value[i], "hour":false})
-
-        }else if(ioName.indexOf(dynamicResult.value[i])+1){
-          res = await axios.post(
-          'https://19bf-211-20-131-166.ngrok.io/patient/intakeOutput/',
-          {"id": 145867, "field_name":dynamicResult.value[i], "hour":false})
+            ' https://vae.fly.dev/patient/vitalPeriodic/',
+            { id: 145867, field_name: dynamicResult.value[i], hour: false }
+          )
+        } else if (ioName.indexOf(dynamicResult.value[i]) + 1) {
+          res = await axios.post(' https://vae.fly.dev/patient/intakeOutput/', {
+            id: 145867,
+            field_name: dynamicResult.value[i],
+            hour: false,
+          })
         }
         res = res.data.data
-        for(var j in res){
-          res[j]['name']=dynamicResult.value[i]
+        for (var j in res) {
+          res[j]['name'] = dynamicResult.value[i]
         }
-        dynamicData.value = dynamicData.value.concat(res);
+        dynamicData.value = dynamicData.value.concat(res)
       }
     }
 
-    const search = ref('')//關鍵字
-    const filterStatic = computed(() =>//關鍵字篩選出來的欄位
+    const search = ref('') //關鍵字
+    const filterStatic = computed(() =>
+      //關鍵字篩選出來的欄位
       staticOrigin.value.filter(
         (data) =>
           !search.value ||
           data.name.toLowerCase().includes(search.value.toLowerCase())
       )
     )
-    const filterDynamic = computed(() =>//關鍵字篩選出來的欄位
+    const filterDynamic = computed(() =>
+      //關鍵字篩選出來的欄位
       dynamicOrigin.value.filter(
         (data) =>
           !search.value ||
@@ -181,12 +204,14 @@ export default({
 
     const staticData = ref([])
     const dynamicData = ref([])
-    
-    const submit = ()=>{
+
+    const submit = () => {
       //靜態
-      staticData.value=[]
-      for(let i=0; i<staticResult.value.length; i++){
-        staticData.value.push(staticOrigin.value.find(({ name }) => name === staticResult.value[i]))
+      staticData.value = []
+      for (let i = 0; i < staticResult.value.length; i++) {
+        staticData.value.push(
+          staticOrigin.value.find(({ name }) => name === staticResult.value[i])
+        )
       }
 
       //動態
@@ -197,11 +222,11 @@ export default({
       getDynamic()
     }
 
-    const onBack = (id, status)=>{
+    const onBack = (id, status) => {
       router.push({ path: '/patient_info', query: { id: id, status: status } })
     }
 
-    onMounted(()=>{
+    onMounted(() => {
       getStatic()
     })
 
@@ -217,25 +242,25 @@ export default({
       dynamicColumn,
       submit,
       onBack,
-      headerStyle
+      headerStyle,
     }
   },
-})
+}
 </script>
 <style scoped>
-.send{
+.send {
   position: absolute;
   right: 4%;
   top: 26%;
   width: 10%;
 }
 
-.checkbox{
+.checkbox {
   height: 400px;
   overflow: auto;
 }
 
-.back{
+.back {
   position: absolute;
   left: 12%;
   width: 25%;
@@ -246,58 +271,63 @@ export default({
   text-align: center;
 }
 
-.header{
+.header {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 60px;
   z-index: 4;
-  background-image: radial-gradient(transparent 1px,#ffffff 1px);
+  background-image: radial-gradient(transparent 1px, #cedae5 1px);
   background-size: 4px 4px;
   backdrop-filter: saturate(50%) blur(4px);
   -webkit-backdrop-filter: saturate(50%) blur(4px);
-  border-bottom:1px rgb(222, 222, 230) solid;
+  border-bottom: 1px #8d9fb0 solid;
 }
 
-h1{
+h1 {
   margin: 0px;
   position: absolute;
-  width:  100%;
+  width: 100%;
   text-align: center;
   left: 0%;
   top: 17%;
 }
 
-.result{
+.result {
   position: absolute;
   width: 80%;
   top: 30%;
   left: 10%;
   padding-bottom: 10px;
 }
-.dynamic{
+.dynamic {
   height: 500px;
   overflow: auto;
   position: absolute;
   width: 48%;
   right: 1%;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
 
-.static{
+.static {
   height: 500px;
   position: absolute;
   width: 48%;
   left: 0%;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
 
-.dynamic:hover,.static:hover{
-  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+.dynamic:hover,
+.static:hover {
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 }
 
-.search{
+.search {
   margin-top: 100px;
   width: 76%;
   height: 50px;
@@ -305,7 +335,8 @@ h1{
   top: 0%;
   left: 10%;
   padding: 20px;
-  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
+    rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
   /* border-bottom:1px rgb(25, 23, 23) solid;; */
 }
 </style>

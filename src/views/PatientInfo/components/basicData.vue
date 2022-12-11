@@ -19,41 +19,41 @@ el-table(
 </template>
 <script>
 import { ref, onMounted } from 'vue'
-import axios from 'axios';
-export default({
-  name: "basicData",
-  props:{
-    id: String
+import axios from 'axios'
+export default {
+  name: 'basicData',
+  props: {
+    id: String,
   },
   setup(props) {
-    const headerStyle = {background:'#bbceed',color:'#606266'}
+    const headerStyle = { background: '#395679', color: '#ffffff' }
 
     const basicData = ref([
-      {value:"", name:""},
-      {value:"", name:""},
-      {value:"", name:""},
-      {value:"", name:""},
-      {value:"", name:""},
-      {value:"", name:""},
-      {value:"", name:""},
-      {value:"", name:""}
+      { value: '', name: '' },
+      { value: '', name: '' },
+      { value: '', name: '' },
+      { value: '', name: '' },
+      { value: '', name: '' },
+      { value: '', name: '' },
+      { value: '', name: '' },
+      { value: '', name: '' },
     ])
     const apiData = ref([])
 
-    const getData = async()=>{
-      apiData.value = await axios.post(
-      'https://19bf-211-20-131-166.ngrok.io/patient/',
-      {"id": props.id})
+    const getData = async () => {
+      apiData.value = await axios.post(' https://vae.fly.dev/patient/', {
+        id: props.id,
+      })
       apiData.value = apiData.value.data.data
 
-      var index=0
-      for(var i in apiData.value){
+      var index = 0
+      for (var i in apiData.value) {
         basicData.value[index].name = i
         basicData.value[index].value = apiData.value[i]
         index++
       }
     }
-      
+
     // })
     // const basicData = [
     //   {data:"Female", name:"Gender"},
@@ -64,14 +64,19 @@ export default({
     //   {data:"54", name:"Apache Score"},
     // ]
 
-    onMounted(()=>{
+    onMounted(() => {
       getData()
     })
 
     return {
       basicData,
-      headerStyle
+      headerStyle,
     }
-  }
-})
+  },
+}
 </script>
+<style scoped>
+.el-table--large {
+  font-size: 20px;
+}
+</style>

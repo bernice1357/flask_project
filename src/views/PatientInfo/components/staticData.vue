@@ -24,21 +24,22 @@ el-table(
 </template>
 <script>
 import { computed, ref, onMounted } from 'vue'
-import axios from 'axios';
-export default({
-  name: "staticData",
-  props:{
-    id: String
+import axios from 'axios'
+export default {
+  name: 'staticData',
+  props: {
+    id: String,
   },
   setup(props) {
     const staticData = ref([])
-    const getData = async()=>{
+    const getData = async () => {
       staticData.value = await axios.post(
-      'https://19bf-211-20-131-166.ngrok.io/patient/lab/static/',
-      {"id": props.id})
+        ' https://vae.fly.dev/patient/lab/static/',
+        { id: props.id }
+      )
       staticData.value = staticData.value.data.data
     }
-    const headerStyle = {background:'#bbceed',color:'#606266'}
+    const headerStyle = { background: '#395679', color: '#ffffff' }
     const staticSearch = ref('')
     const filterStaticData = computed(() =>
       staticData.value.filter(
@@ -48,15 +49,20 @@ export default({
       )
     )
 
-    onMounted(()=>{
+    onMounted(() => {
       getData()
     })
 
     return {
       staticData,
       filterStaticData,
-      headerStyle
+      headerStyle,
     }
-  }
-})
+  },
+}
 </script>
+<style scoped>
+.el-table--large {
+  font-size: 20px;
+}
+</style>

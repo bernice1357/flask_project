@@ -8,7 +8,6 @@
     router-view
 </template>
 <script>
-
 import {ref} from 'vue'
 import AllPatients from '@v/AllPatients/AllPatients.vue'
 import SummaryPage from '@v/SummaryPage/SummaryPage.vue'
@@ -49,17 +48,19 @@ export default({
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
   width: 100vw;
   height: 59px;
-  background-image: radial-gradient(transparent 1px,#ffffff 1px);
+  background-image: radial-gradient(transparent 1px,#cedae5 1px);
   background-size: 4px 4px;
   backdrop-filter: saturate(50%) blur(4px);
   -webkit-backdrop-filter: saturate(50%) blur(4px);
   border-bottom:1px rgb(222, 222, 230) solid;
 }
 img{
+  margin-top: 2px;
   position: absolute;
-  top:0;
-  left: 1%;
-  width: 240px;
+  top: 3%;
+  left: 2%;
+  /* width: 250px; */
+  height: 50px;
 }
 .menu{
   position: absolute;
@@ -72,5 +73,6 @@ img{
   left: 5%;
   height: 80vh;
   width: 90vw;
+  /* background-color: #8da3b7; */
 }
 </style>
