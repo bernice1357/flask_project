@@ -63,22 +63,22 @@ export default {
   name: 'AllPatients',
   setup() {
     const status = [
-      '12',
-      '44',
-      '33',
-      '65',
-      '90',
-      '56',
-      '22',
-      '84',
-      '73',
-      '95',
-      '40',
-      '66',
-      '37',
-      '60',
+      '99',
+      '98',
+      '97',
+      '6',
+      '100',
+      '51',
+      '99',
+      '98',
+      '97',
+      '4',
+      '99',
+      '99',
       '96',
-      '36',
+      '100',
+      '100',
+      '72',
     ]
     const tableData = ref([])
     const getData = async () => {
@@ -86,10 +86,8 @@ export default {
       tableData.value = tableData.value.data.data
 
       for (var i in tableData.value) {
-        // console.log(status[i])
         tableData.value[i].tag = status[i]
       }
-      // console.log('eee: ',tableData.value)
     }
 
     const redirect = (row) => {
@@ -135,9 +133,6 @@ export default {
   margin-top: 40px;
   font-size: 16px;
 }
-/* .el-breadcrumb.el-breadcrumb__item.el-breadcrumb__inner{
-  font-size: 20px;
-} */
 .header {
   position: absolute;
   top: 0;

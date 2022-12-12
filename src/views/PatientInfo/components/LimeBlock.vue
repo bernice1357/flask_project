@@ -20,9 +20,9 @@ export default {
       //TODO:這邊要改回來
       imgID.value = props.id
       document.getElementById('LimeBlock').style =//'background-color: #85ce61'
-        props.status >= 50
-          ? 'background-color: #85ce61'
-          : 'background-color: #f89898'
+        props.status < 50
+          ? 'background-color: #f89898'
+          : 'background-color: #85ce61'
     }
     onMounted(() => {
       limeColor()
