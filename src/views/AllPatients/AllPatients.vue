@@ -63,7 +63,7 @@ export default {
   name: 'AllPatients',
   setup() {
     const status = [
-      '99',
+      '65',
       '98',
       '97',
       '6',
@@ -82,7 +82,7 @@ export default {
     ]
     const tableData = ref([])
     const getData = async () => {
-      tableData.value = await axios.post(' https://vae.fly.dev/patient/all/')
+      tableData.value = await axios.post('https://vae.fly.dev/patient/all/')
       tableData.value = tableData.value.data.data
 
       for (var i in tableData.value) {
